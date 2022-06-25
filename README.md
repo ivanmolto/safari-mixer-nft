@@ -22,7 +22,7 @@ Dynamic based on the price of MATIC (binary value based on 1 MATIC >= 1 USD or 1
 Chances for random are:
 [5, 10, 15, 20, 25, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 72, 76, 80, 83, 86, 89, 91, 93, 95, 97, 99, MAX_CHANCE_VALUE];
 
-For these animals: TORTOISE, FROG, LIZARD, CHICKEN, DUCK, FLAMINGO, BUNNY, SHEEP, CAT, DOG,  PIG, ANTELOPE, FOX, GIRAFFE, OSTRICH, HYENA, CROCODILE, GORILLA, BUFFALO, HIPPO, RHINO,ELEPHANT, PUMA, LEOPARD, TIGER, LION, DINOSAUR, AND UNICORN.
+For these animals: antelope, buffalo, bunny, cat, chicken, crocodile, dinosaur, dog, duck, elephant, flamingo, fox, frog, giraffe, gorilla, hippo, hyena, leopard, lion, lizard, ostrich, pig, puma, rhino, sheep, tiger, tortoise, and unicorn.
 
 
 ## Smart contract address (Verified)
