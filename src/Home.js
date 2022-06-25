@@ -47,34 +47,18 @@ const Logo = styled.img`
   }
 `;
 
+const Spinner = styled.div`
+  
+  background-image: url(/static/img/safari_mixer_spinner.gif) no-repeat center center fixed;
+  
+`;
+
+const CONTRACT_ADDRESS = "0x95B4f2897B96e94Ce73aAF1298EaE00Bd01defCb";
+
 const Home = () => {
   const [header, setHeader] = useContext(HeaderContext);
+  const [loading, setLoading] = useState(false);
   const [currentAccount, setCurrentAccount] = useState("");
-
-  const renderNotConnectedContainer = () => (
-    <div>
-      <Logo className="center-align" src="/static/img/safari_mixer_logo.png" />
-      <Start className="valign-wrapper" onClick={connectWallet}>
-        <MicIcon className="small material-icons">
-          <span className="material-symbols-outlined">
-            account_balance_wallet
-          </span>
-        </MicIcon>
-        <StartText className="center-align">CONNECT YOUR WALLET</StartText>
-      </Start>
-    </div>
-  );
-
-  const renderMintBox = () => (
-    <div>
-      <Start className="valign-wrapper" onClick={askContractToMintNft}>
-        <MicIcon className="small material-icons">
-          <span className="material-symbols-outlined">star</span>
-        </MicIcon>
-        <StartText className="center-align">MINT YOUR ANIMAL</StartText>
-      </Start>
-    </div>
-  );
 
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -85,6 +69,15 @@ const Home = () => {
       console.log("We have the Ethereum object", ethereum);
     }
 
+    let chainId = await ethereum.request({ method: "eth_chainId" });
+    console.log("connected to chain " + chainId );
+
+    // String, hex code of the chainId of the Polygon Mumbai test network
+    const polygonMumbaiChainId = "0x13881";
+    if (chainId !== polygonMumbaiChainId) {
+      alert("You are not connected to the Polygon Mumbai Testnet");
+    }
+
     // Check if we're authorized to access the user's wallet
     const accounts = await ethereum.request({ method: "eth_accounts" });
     if (accounts.length !== 0) {
@@ -92,6 +85,7 @@ const Home = () => {
       console.log("Found an authorized account:", account);
       setCurrentAccount(account);
       setHeader(true);
+      setupEventListener();
     } else {
       setHeader(false);
       console.log("No authorized account found");
@@ -114,11 +108,61 @@ const Home = () => {
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
       setHeader(true);
+      setupEventListener();
     } catch (error) {
       setHeader(false);
       console.log(error);
     }
   };
+
+  const renderNotConnectedContainer = () => (
+    <div>
+      <Logo className="center-align" src="/static/img/safari_mixer_logo.png" />
+      <Start className="valign-wrapper" onClick={connectWallet}>
+        <MicIcon className="small material-icons">
+          <span className="material-symbols-outlined">
+            account_balance_wallet
+          </span>
+        </MicIcon>
+        <StartText className="center-align">CONNECT YOUR WALLET</StartText>
+      </Start>
+    </div>
+  );
+
+  const renderMintBox = () => (
+    <div>
+      <Start className="valign-wrapper" onClick={askContractToMintNft}>
+        <MicIcon className="small material-icons">
+          <span className="material-symbols-outlined">star</span>
+        </MicIcon>
+        <StartText className="center-align">MINT YOUR ANIMAL</StartText>
+        {loading && <Spinner />}
+      </Start>
+
+    </div>
+  );
+
+  // Setup our listener
+  const setupEventListener = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, safariMixerNFT.abi, signer);
+
+        /* connectedContract.on("NftMinted", (animalSpecie, animalOwner) => {
+          console.log(animalSpecie, animalOwner);
+        }); */
+
+        console.log("Setup event listener");
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch(error) {
+      console.log(error);
+    }
+  }
 
   const askContractToMintNft = async () => {
     const CONTRACT_ADDRESS = "0x95B4f2897B96e94Ce73aAF1298EaE00Bd01defCb";
@@ -143,10 +187,10 @@ const Home = () => {
         let nftTxn = await connectedContract.requestNft({
           value: mintFee.toString(),
         });
-
+        setLoading(true);
         console.log("Mining...please wait.");
         await nftTxn.wait();
-
+        setLoading(false)
         console.log(
           `Mined, see transaction: https://mumbai.polygonscan.com/tx/${nftTxn.hash}`
         );
