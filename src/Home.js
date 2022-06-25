@@ -58,7 +58,9 @@ const CONTRACT_ADDRESS = "0x95B4f2897B96e94Ce73aAF1298EaE00Bd01defCb";
 const Home = () => {
   const [header, setHeader] = useContext(HeaderContext);
   const [loading, setLoading] = useState(false);
+  const [mined, setMined] = useState(false);
   const [currentAccount, setCurrentAccount] = useState("");
+  const [txMined, setTxMined] = useState("");
 
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -136,9 +138,10 @@ const Home = () => {
           <span className="material-symbols-outlined">star</span>
         </MicIcon>
         <StartText className="center-align">MINT YOUR ANIMAL</StartText>
-        {loading && <Spinner />}
       </Start>
-
+      {loading && <div>Mining...please wait.</div>}
+      {mined && <div>Mined, see <a href={`https://mumbai.polygonscan.com/tx/${txMined}`} target="_blank"
+              rel="noopener noreferrer">transaction</a></div>}
     </div>
   );
 
@@ -165,6 +168,8 @@ const Home = () => {
   }
 
   const askContractToMintNft = async () => {
+    setMined(false);
+    setTxMined();
     const CONTRACT_ADDRESS = "0x95B4f2897B96e94Ce73aAF1298EaE00Bd01defCb";
 
     try {
@@ -194,6 +199,8 @@ const Home = () => {
         console.log(
           `Mined, see transaction: https://mumbai.polygonscan.com/tx/${nftTxn.hash}`
         );
+        setTxMined(nftTxn.hash);
+        setMined(true);
       } else {
         console.log("Ethereum object doesn't exist!");
       }
