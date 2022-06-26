@@ -4,6 +4,7 @@ A dynamic, random, and unlimited NFT collection.
 Mint your new brand animal and start your safari!
 
 Live demo at [www.safarimixer.com](https://www.safarimixer.com)
+Another demo [link](https://safari-mixer-nft.vercel.app)
 
 Presentation in PDF format [here](https://github.com/ivanmolto/safari-mixer-nft/blob/master/presentation/safari-mixer-nft-ivanmolto.pdf)
 
