@@ -139,7 +139,8 @@ const Home = () => {
         </MicIcon>
         <StartText className="center-align">MINT YOUR ANIMAL</StartText>
       </Start>
-      {loading && <div>Mining...please wait.</div>}
+      {!loading && !mined && <div>Price: 0.1 MATIC</div>}
+      {loading && <div>Mining...please wait</div>}
       {mined && <div>Mined, see <a href={`https://mumbai.polygonscan.com/tx/${txMined}`} target="_blank"
               rel="noopener noreferrer">transaction</a></div>}
     </div>
