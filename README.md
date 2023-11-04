@@ -3,6 +3,8 @@
 A dynamic, random, and unlimited NFT collection.
 Mint your new brand animal and start your safari!
 
+Polygon Hackathon by Encode Club - Fullstack challenge winner 🏆
+
 Live demo at [www.safarimixer.com](https://www.safarimixer.com)
 Another demo [link](https://safari-mixer-nft.vercel.app)
 
